@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles.css')}}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="image-container">
+          <img src="{{url_for('static',filename = 'sbom.png' )}}">
+          <img src="{{url_for('static',filename = 'shrijee.png' )}}">
+          <img src="{{url_for('static',filename = 'bom.png' )}}">
+      </div>
+      <div class="text-container">
+          <h1>SBOM Structural Bill Of Materials</h1>
+          <p><b>Here are some Of the rules that a drawing should contain:</b></p>
+          <p>The List of <b>Keywords</b> which should <b>not be repeated both near text from where it should be extracted and in the diagram</b> - <b>ISMB,ISMC,MKD,PLT,THK,SHEET NO, REV NO, </b></p>
+          <p>The <b>Green color Border</b> should be of Thickness 1.20 mm.</p>
+          <p>One beam should contain only one MKD keyword.</p>
+          <p>The MKD keyword and values should be written as</p>
+            <p>&emsp;a.  Single Value         -     MKD. B12</p>
+            <p>&emsp;b.  Multiple Values      -     MKD. B12,B13,B14</p>
+            <p>&emsp;c.  TO Keyword Values    -     MKD. B12 TO B19</p>
+            <p>&emsp;d.  Multi-line Values    -     MKD. B10,B11,B12,B13,</p>
+            <p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;B14,B15,B16,B17 </p>
+          <p>Write Full abbrevations ISMB, ISMC not MB, MC</p>
+          <p>Gap between <b>ISMB 300 X 6000 Lg. </b>Gaps between each Of them should be present as shown.</p>
+          <p>The Sheet Number and Revision Number should be present as follows:</p>
+            <b><p>SHEET NO. 1 OF 2</p>
+            <P>REV NO.   R1</P></b>
+          <p>PLT to THK keyword present on first line 
+            - Quantity present on next line
+            </p>
+            <b><p>PLT 150 X 200 X 8 THK</p>
+            <p>- 1 NOs</p></b>
+            <p>ISA to THK keyword present on first line 
+              - Length and Quantity present on next line
+              </p>
+            <b><p>ISA 100 X 100 X 10 THK</p>
+            <p>350 Lg - 2 NOs</p></b>
+      </div>
+  </div>
+    <form method="POST" enctype="multipart/form-data">
+	<div align="center">
+    <div class="form-container">
+      {{form.hidden_tag()}} 
+      <label class="upload-button" for="file-upload">{{form.file()}}</label>
+  <br><br>
+	<button type="submit" class="submit-button">{{form.submit()}}</button>
+    <br><Br>
+</div>
+    </form>
+  </body>
+</html>
+
+

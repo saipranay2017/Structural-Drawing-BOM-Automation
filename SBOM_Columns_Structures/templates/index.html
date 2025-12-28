@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBOM - Structure Bill of Materials</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+
+
+
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background-color: #0073e6;
+            color: white;
+        }
+
+
+
+
+        .header img {
+            height: 100px;
+        }
+
+
+
+
+        .header h1 {
+            flex-grow: 1;
+            font-size: 56px;
+            margin: 0;
+            text-align: center;
+            color: #ffcc00;
+        }
+
+
+
+
+        .container {
+            margin: 50px auto;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+
+        .upload-section {
+            margin: 40px 0;
+        }
+
+
+
+
+        .upload-section label {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+
+
+
+        .upload-section input[type="file"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+
+
+
+        .upload-section .upload-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+
+
+
+        .upload-section .upload-btn:hover {
+            background-color: #005bb5;
+        }
+
+
+
+
+        .processing {
+            margin-top: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 20px;
+        }
+
+
+
+
+        .processing img {
+            height: 80px;
+            margin-top: 15px;
+        }
+
+
+        #uploaded-files strong {
+            font-size: 22px; /* Increased font size for headings */
+            color: mediumseagreen; /* Medium green color for "Bill Of Materials" */
+            font-weight: bold;
+                }
+
+
+
+
+        #uploaded-files ul {
+            list-style: disc;
+            padding-left: 20px;
+            }
+
+
+
+
+        #uploaded-files li {
+            font-size: 18px; /* Matching the font size of error messages */
+            color: mediumseagreen; /* Medium green color for Excel file names */
+            }
+
+
+
+
+        #uploaded-files {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+
+
+
+        #uploaded-files .error-heading {
+            color: red;
+            font-size: 22px; /* Matching the size of success heading */
+            font-weight: bold;
+    }
+
+
+
+
+        #uploaded-files .error-item {
+            color: red;
+            font-size: 18px; /* Matching the size of Excel file names */
+        }
+
+
+
+
+
+
+        #uploaded-files .error-no-files {
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+
+
+
+
+<body>
+    <div class="header">
+        <img src="static/images/shrijee1.png" alt="Logo">
+        <h1>SBOM - Structure Bill Of Material</h1>
+    </div>
+    <div class="container">
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="upload-section">
+                <label for="files">Upload Column Drawings</label>
+                <input type="file" id="files" name="files[]" multiple>
+                <button class="upload-btn" type="submit">Upload</button>
+            </div>
+        </form>
+        <div class="processing" id="processing">
+            <strong>Generating Bill Of Material</strong>
+            <img src="static/images/loading.gif" alt="Processing...">
+        </div>
+        <div id="uploaded-files"></div>
+    </div>
+
+
+
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+
+
+
+
+            // Show the loading animation
+            const processingDiv = document.getElementById('processing');
+            const uploadedFilesDiv = document.getElementById('uploaded-files');
+
+
+
+
+            processingDiv.style.display = 'flex';
+            uploadedFilesDiv.innerHTML = '';
+
+
+
+
+            // Upload files
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.no_files_uploaded) {
+                        processingDiv.style.display = 'none';
+                        uploadedFilesDiv.innerHTML = '<div class="error-no-files">No Files Uploaded</div>';
+                        return;
+                    }
+
+
+
+
+                    // Process files
+                    return fetch('/process', { method: 'POST' });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    processingDiv.style.display = 'none';
+                    uploadedFilesDiv.innerHTML = '';
+
+
+
+
+                    if (data.processed_files.length > 0) {
+                        uploadedFilesDiv.innerHTML += '<strong>Bill Of Material Successfully Generated:</strong><ul>';
+                        data.processed_files.forEach(file => {
+                            uploadedFilesDiv.innerHTML += `<li>${file}</li>`;
+                        });
+                        uploadedFilesDiv.innerHTML += '</ul>';
+                    }
+
+
+
+
+                    if (data.error_pdf_files && data.error_pdf_files.length > 0) {
+                        uploadedFilesDiv.innerHTML += '<br><strong class="error-heading">Error in Drawings:</strong><ul>';
+                        data.error_pdf_files.forEach(file => {
+                            uploadedFilesDiv.innerHTML += `<li class="error-item">${file}</li>`;
+                        });
+                        uploadedFilesDiv.innerHTML += '</ul>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    processingDiv.style.display = 'none';
+                });
+        });
+    </script>
+</body>
+</html>

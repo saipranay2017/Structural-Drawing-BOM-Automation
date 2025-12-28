@@ -1,0 +1,97 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.image-container {
+    flex: 1;
+    max-width: 50%;
+    margin-right: 20px;
+    align-items: center;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.text-container {
+    flex: 2;
+}
+
+.text-container h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.text-container p {
+    font-size: 1em;
+    line-height: 1;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .image-container {
+        max-width: 100%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+}
+
+.upload-button, .submit-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: none;
+    color: white;
+}
+
+.upload-button {
+    background-color: #4CAF50; /* Green */
+}
+
+.upload-button:hover {
+    background-color: #45a049; /* Darker Green */
+}
+
+.submit-button {
+    background-color: #008CBA; /* Blue */
+}
+
+.submit-button:hover {
+    background-color: #007bb5; /* Darker Blue */
+}
+
+.form-container {
+    margin: 20px;
+}
+
+.form-container br {
+    margin-bottom: 10px;
+}
